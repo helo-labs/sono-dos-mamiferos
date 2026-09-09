@@ -13,6 +13,32 @@ import { trava } from "./formas";
 const ESTRELAS = 130;
 const NUVENS = 6;
 
+/**
+ * Em que ponto da rolagem cada coisa do céu entra e sai.
+ *
+ * Estava tudo como literal solto, e dois deles apareciam duas vezes: o começo
+ * das nuvens governa a opacidade delas E o deslocamento do paralaxe, e a
+ * entrada da lua governa a opacidade dela E a subida. Mudar um lugar e esquecer
+ * o outro dessincronizava sem dar erro em canto nenhum.
+ *
+ * `NUVENS_FIM` tem um motivo que não é estético: o texto da página vira branco
+ * em p≈0,62, e nuvem quase branca atrás de texto branco derruba o contraste da
+ * leitura para 1,3. As nuvens têm que ter saído antes disso.
+ */
+const CEU = {
+  NUVENS_INICIO: 0.14,
+  NUVENS_CHEIAS: 0.12,
+  NUVENS_FIM: 0.46,
+  ESTRELAS_INICIO: 0.72,
+  ESTRELAS_RAMPA: 0.2,
+  ESTRELAS_OPACIDADE: 0.8,
+  LUA_INICIO: 0.74,
+  LUA_RAMPA: 0.14,
+  LUA_OPACIDADE: 0.95,
+  LUA_SUBIDA_RAMPA: 0.26,
+  LUA_SUBIDA_PX: 90,
+};
+
 /** Gerador determinístico: o mesmo céu em toda visita, sem arquivo de dados. */
 function semente(n) {
   let s = n;
@@ -73,19 +99,18 @@ export default function Ceu({ progresso }) {
   const nuvem = useMemo(nuvens, []);
   const p = progresso;
 
-  // As nuvens saem antes de o texto virar branco, em p=0,478. Elas são quase
-  // brancas e ficam atrás da coluna de texto: com as duas coisas na tela ao
-  // mesmo tempo, o contraste da leitura caía para 1,3. Nuvem é coisa do dia, e
-  // o dia acaba aqui.
-  const opNuvens = trava((p - 0.14) / 0.12) * trava((0.46 - p) / 0.12);
+  const opNuvens =
+    trava((p - CEU.NUVENS_INICIO) / CEU.NUVENS_CHEIAS) *
+    trava((CEU.NUVENS_FIM - p) / CEU.NUVENS_CHEIAS);
 
   // as estrelas só acendem no último quarto, e discretamente
-  const opEstrelas = trava((p - 0.72) / 0.2) * 0.8;
+  const opEstrelas =
+    trava((p - CEU.ESTRELAS_INICIO) / CEU.ESTRELAS_RAMPA) * CEU.ESTRELAS_OPACIDADE;
 
-  // a lua entra depois das estrelas e sobe o resto da rolagem, de 90px até o
-  // lugar dela
-  const opLua = trava((p - 0.74) / 0.14) * 0.95;
-  const sobeLua = (1 - trava((p - 0.74) / 0.26)) * 90;
+  // a lua entra depois das estrelas e sobe o resto da rolagem até o lugar dela
+  const opLua = trava((p - CEU.LUA_INICIO) / CEU.LUA_RAMPA) * CEU.LUA_OPACIDADE;
+  const sobeLua =
+    (1 - trava((p - CEU.LUA_INICIO) / CEU.LUA_SUBIDA_RAMPA)) * CEU.LUA_SUBIDA_PX;
 
   return (
     <div className="ceu" aria-hidden="true">
@@ -100,7 +125,7 @@ export default function Ceu({ progresso }) {
               left: `${n.x}%`,
               top: `${n.y}%`,
               width: `${n.largura}vw`,
-              transform: `translate3d(${(p - 0.14) * n.passo}vw, 0, 0)`,
+              transform: `translate3d(${(p - CEU.NUVENS_INICIO) * n.passo}vw, 0, 0)`,
             }}
           >
             <span

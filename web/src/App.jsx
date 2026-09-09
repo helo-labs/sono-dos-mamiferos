@@ -24,6 +24,9 @@ function Enfase({ children }) {
   });
 }
 
+/** Quanta rolagem basta para a seta da capa entender que já começou e sair. */
+const ROLAGEM_QUE_APAGA_A_SETA = 0.03;
+
 export default function App() {
   const progresso = useProgressoDaRolagem();
   const { atual, refs } = useSecaoAtiva(SECOES.length);
@@ -62,7 +65,7 @@ export default function App() {
         </div>
         <p
           className="rolar"
-          style={{ color: cores.textoFraco, opacity: 1 - trava(progresso / 0.03) }}
+          style={{ color: cores.textoFraco, opacity: 1 - trava(progresso / ROLAGEM_QUE_APAGA_A_SETA) }}
         >
           role para começar o dia ↓
         </p>
