@@ -1,13 +1,13 @@
 # Hipnos — os 62 mamíferos
 
-Ordenado por horas de sono. ⚠ = tradução que precisa da sua conferência.
+Ordenado por horas de sono. As traduções foram conferidas e aceitas em 09/09/2026.
 
 | # | Português | Inglês | Dorme | Sonha |
 |---|---|---|---|---|
 | 1 | Morcego-marrom-pequeno | Little brown bat | 19,9h | 2,0h |
 | 2 | Morcego-marrom-grande | Big brown bat | 19,7h | 3,9h |
 | 3 | Gambá-norte-americano | North American opossum | 19,4h | 5,6h |
-| 4 | Cuíca-d'água ⚠ | Water opossum | 19,4h | 6,6h |
+| 4 | Cuíca-d'água | Water opossum | 19,4h | 6,6h |
 | 5 | Tatu-canastra | Giant armadillo | 18,1h | 6,1h |
 | 6 | Tatu-galinha | Nine-banded armadillo | 17,4h | 3,1h |
 | 7 | Macaco-da-noite | Owl monkey | 17,0h | 1,8h |
@@ -16,7 +16,7 @@ Ordenado por horas de sono. ⚠ = tradução que precisa da sua conferência.
 | 10 | Gato | Cat | 14,5h | 3,6h |
 | 11 | Hamster-sírio | Golden hamster | 14,4h | 3,4h |
 | 12 | Esquilo-terrestre | Ground squirrel | 13,8h | 3,4h |
-| 13 | Falanger ⚠ | Phalanger | 13,7h | 1,8h |
+| 13 | Falanger | Phalanger | 13,7h | 1,8h |
 | 14 | Tenrec | Tenrec | 13,3h | 2,3h |
 | 15 | Camundongo | Mouse | 13,2h | 1,3h |
 | 16 | Rato | Rat | 13,2h | 2,6h |
@@ -47,12 +47,12 @@ Ordenado por horas de sono. ⚠ = tradução que precisa da sua conferência.
 | 41 | Porco | Pig | 8,4h | 1,9h |
 | 42 | Rato-gigante-africano | African giant pouched rat | 8,3h | 2,0h |
 | 43 | Porquinho-da-índia | Guinea pig | 8,2h | 0,8h |
-| 44 | Ser humano ⚠ | Man | 8,0h | 1,9h |
-| 45 | Hirax-das-rochas (Heterohyrax) ⚠ | Rock hyrax (Heterohyrax) | 6,6h | 0,9h |
+| 44 | Ser humano | Man | 8,0h | 1,9h |
+| 45 | Hirax-das-rochas (Heterohyrax) | Rock hyrax (Heterohyrax) | 6,6h | 0,9h |
 | 46 | Anta | Brazilian tapir | 6,2h | 1,0h |
 | 47 | Foca-cinzenta | Gray seal | 6,2h | 1,5h |
 | 48 | Geneta | Genet | 6,1h | 1,3h |
-| 49 | Hirax-das-rochas (Procavia) ⚠ | Rock hyrax (Procavia) | 5,4h | 0,5h |
+| 49 | Hirax-das-rochas (Procavia) | Rock hyrax (Procavia) | 5,4h | 0,5h |
 | 50 | Hirax-arborícola | Tree hyrax | 5,4h | 0,5h |
 | 51 | Elefante-asiático | Asian elephant | 3,9h | 1,8h |
 | 52 | Vaca | Cow | 3,9h | 0,7h |

@@ -127,7 +127,6 @@ No fio, a página inteira são **97,5 KB comprimidos**. Metade disso é o framer
 
 ## Limites conhecidos
 
-* **Seis traduções por conferir.** Estão marcadas com ⚠ em `data/NOMES.md`. Cuíca-d'água, falanger e os dois hirax são os que mais me deixaram em dúvida.
 * **A virada de cor das marcas.** Um fundo que vai de creme a azul-noite obriga a marca a trocar de lado em algum ponto, e nesse ponto ela passa por um contraste baixo. Está em 6,2% da rolagem, entre a quarta e a quinta tela, colocado ali porque é onde nenhuma fase está sendo lida.
 * **Quatro espécies fora.** Girafa, canguru, okapi e marmota-de-barriga-amarela não tiveram o sono total medido. Sem essa medida a marca ficaria vazia nas sete telas, e vazio não é zero. Elas aparecem nomeadas no rodapé do site.
 * **Os índices são classificação, não medida.** Predação, exposição e perigo são notas de 1 a 5 que os autores atribuíram em 1976, não levantamento de campo.
