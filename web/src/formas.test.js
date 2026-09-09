@@ -1,10 +1,9 @@
 /**
  * As invariantes da geometria.
  *
- * A promessa da narrativa é que a marca de um bicho é sempre a mesma marca,
- * em todas as sete formas. Isso só se sustenta se toda espécie tiver posição
- * em toda fase, sempre com número finito e dentro do quadro. É o que se checa
- * aqui, forma por forma, com as 58 espécies de verdade.
+ * A marca de um bicho tem que ser a mesma marca nas sete formas, o que só se
+ * sustenta se toda espécie tiver posição finita e dentro do quadro em toda
+ * fase. Checado forma por forma, com as 58 espécies de verdade.
  */
 
 import test from "node:test";

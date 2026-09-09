@@ -1,16 +1,11 @@
 /**
  * A página amanhece no topo e anoitece conforme a rolagem desce.
  *
- * O dia inteiro está aqui, e não só as duas pontas dele: o creme da madrugada
- * abre para o azul da manhã, o azul fecha no do meio-dia, e só então a luz cai
- * para a areia, a terracota e a ameixa do entardecer. A versão anterior pulava
- * do amanhecer direto para o pôr do sol e o céu passava o dia inteiro quente,
- * sem nunca ser azul.
+ * O arco tem o dia inteiro: creme da madrugada, azul da manhã, azul do
+ * meio-dia, areia, terracota e ameixa do entardecer, azul-noite.
  *
- * Entre o azul e a terracota entra um marco de areia clara. É o mesmo cuidado
- * de sempre: a reta entre azul e terracota atravessa o cinza, e o meio da
- * página ficava lodoso. Passando por uma cor clara e pouco saturada, a
- * travessia lê como o ar lavando no fim da tarde, não como sujeira.
+ * O marco de areia entre o azul e a terracota não é decorativo. A reta entre
+ * essas duas cores atravessa o cinza, e o meio da página ficava lodoso.
  *
  * O texto não é interpolado junto: ele troca de claro para escuro de uma vez,
  * quando o fundo cruza o limiar de luminância, com uma transição curta no CSS.
@@ -29,24 +24,20 @@ const CEU = [
 ];
 
 /**
- * As tintas da marca, escuras enquanto o céu está claro e claras depois que ele
- * escurece.
+ * As tintas da marca, escuras enquanto o céu está claro e claras depois dele
+ * escurecer.
  *
- * Antes eram três marcos e a marca era clara o tempo todo: uma tinta creme em
- * cima de um céu claro. Medido, o sono da segunda fase dava 1,06 de contraste e
- * o risco 3 chegava a 1,00, luminância idêntica à do fundo. A marca existia
- * como matiz e não existia como luz.
+ * Marca clara em céu claro não se enxerga: com tinta creme no meio-dia, o sono
+ * da segunda fase mede 1,06 de contraste e o risco 3 mede 1,00, a mesma
+ * luminância do fundo.
  *
- * Os tons daqui são os mesmos que já estavam escritos, levados a outra
- * luminância: escurecer é multiplicar a luz linear, o que mantém a proporção
- * entre os canais, então o laranja continua laranja e vira âmbar, não marrom
- * sujo. Foram os saturados do marco 0 que serviram de base, não os creme do
- * meio-dia, senão o resultado sai lamacento.
+ * Os tons são levados a outra luminância multiplicando a luz linear, o que
+ * mantém a proporção entre os canais e o matiz de pé. A base tem que ser um tom
+ * saturado; partindo dos creme o resultado sai lamacento.
  *
- * A virada de escuro para claro é curta de propósito, entre 0,60 e 0,62, e cai
- * entre a quarta e a quinta fase. Ela existe porque tem que existir: um fundo
- * que vai de creme a azul-noite obriga a marca a trocar de lado em algum ponto,
- * e ali é onde a leitura de nenhuma fase está no meio.
+ * A virada de escuro para claro é curta, entre 0,60 e 0,62, e cai entre a
+ * quarta e a quinta fase. Um fundo que vai de creme a azul-noite obriga a marca
+ * a trocar de lado em algum ponto, e ali nenhuma fase está sendo lida.
  */
 const TINTA = [
   { em: 0.0, sono: [164, 100, 31], sonho: [169, 79, 104], acordado: [232, 222, 208] },
@@ -58,12 +49,13 @@ const TINTA = [
 ];
 
 /**
- * A escala do risco, de 1 (protegido) a 5 (exposto), nos mesmos marcos.
+ * A escala do risco, de 1 (protegido) a 5 (exposto), nos mesmos marcos da
+ * TINTA.
  *
- * Era uma interpolação só, de um conjunto de dia para um de noite, e por isso
- * não conseguia ser escura na terceira fase e clara na sétima. Aqui ela tem a
- * mesma virada da TINTA, e as duas fases de risco caem as duas no lado escuro,
- * com o céu ainda claro. Os cinco matizes são os que já estavam escritos.
+ * Precisa de marcos, e não de uma interpolação só entre um conjunto de dia e um
+ * de noite: com uma reta só ela não consegue ser escura na terceira fase e
+ * clara na sétima. Com a virada, as duas fases de risco caem no lado escuro,
+ * com o céu ainda claro.
  */
 const RISCO = [
   { em: 0.0, cores: [[86, 124, 79], [114, 119, 53], [148, 107, 35], [179, 90, 44], [182, 85, 84]] },
@@ -78,28 +70,25 @@ const TEXTO_CLARO = [240, 240, 248];
 /**
  * O texto fraco é o texto forte caminhando um terço em direção ao fundo.
  *
- * Antes eram dois valores fixos, um para o dia e um para a noite, e nenhum dos
- * dois sobrevivia à travessia: em p≈0,48 o fraco caía para 1,24 de contraste e
- * as réguas do gráfico sumiam da tela. Derivando do fundo de cada momento, a
- * hierarquia é sempre a mesma proporção, e o pior caso dobra.
+ * Dois valores fixos, um de dia e um de noite, não sobrevivem à travessia: em
+ * p≈0,48 o fraco cai para 1,24 de contraste e as réguas do gráfico somem da
+ * tela. Derivado, ele guarda sempre a mesma proporção do texto forte.
  *
- * O preço é o tom: o fraco da noite era azulado de propósito e agora sai quase
- * neutro, porque nasce do branco do texto e não de uma cor escolhida à parte.
+ * O preço é o tom: nasce do branco do texto, então o fraco da noite sai quase
+ * neutro em vez de azulado.
  */
 const CAMINHO_DO_FRACO = 0.34;
 
 /**
  * A linha da grade sai do fundo, um passo curto na direção do texto.
  *
- * Ela também era um valor por marco, e também não sobrevivia à interpolação:
- * o marco da areia definia uma linha mais escura que o próprio fundo e o da
- * terracota definia uma mais clara. Entre um e outro elas se igualavam, e em
- * p=0,436 a grade desaparecia. (O arco antigo tinha o mesmo buraco, em 0,382.)
+ * Um valor por marco não funciona aqui: um marco define a linha mais escura que
+ * o próprio fundo, o seguinte define mais clara, e no meio do caminho as duas se
+ * igualam e a grade some da tela. Saindo do fundo, ela fica sempre do mesmo lado
+ * dele.
  *
- * Saindo do fundo, ela está sempre do mesmo lado dele e o cruzamento não existe.
- * 0,18 é o passo que reproduz o peso que a grade já tinha: desenhada a 0,3 de
- * opacidade, ela fica entre 1,09 e 1,15 de contraste, onde antes ficava entre
- * 1,08 e 1,15 fora do buraco.
+ * 0,18 é o passo que dá o peso certo: desenhada a 0,3 de opacidade, a grade fica
+ * entre 1,07 e 1,17 de contraste.
  */
 const CAMINHO_DA_LINHA = 0.18;
 
@@ -162,10 +151,9 @@ function claro(c) {
 /**
  * A cor da marca sob o mouse, mais viva que a das outras.
  *
- * O ganho é só de saturação: os canais se afastam da luminância da própria cor,
- * que fica de pé. A marca acesa continua o mesmo tom — verde do risco 1 é verde
- * do risco 1 — e não vira uma cor nova que não existe em lugar nenhum da
- * escala. O que clipar no caminho fica no limite do gamut.
+ * Só saturação: os canais se afastam da luminância da própria cor, que fica de
+ * pé, então o verde do risco 1 continua o verde do risco 1 em vez de virar um
+ * tom que não existe na escala. O que clipar fica no limite do gamut.
  */
 const SATURACAO_HOVER = 1.5;
 

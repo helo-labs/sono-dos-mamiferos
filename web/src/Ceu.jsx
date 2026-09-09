@@ -16,14 +16,12 @@ const NUVENS = 6;
 /**
  * Em que ponto da rolagem cada coisa do céu entra e sai.
  *
- * Estava tudo como literal solto, e dois deles apareciam duas vezes: o começo
- * das nuvens governa a opacidade delas E o deslocamento do paralaxe, e a
- * entrada da lua governa a opacidade dela E a subida. Mudar um lugar e esquecer
- * o outro dessincronizava sem dar erro em canto nenhum.
+ * Ficam juntos porque dois deles governam duas coisas cada: o começo das nuvens
+ * vale para a opacidade e para o deslocamento do paralaxe, e a entrada da lua
+ * vale para a opacidade e para a subida. Separados, dessincronizam sem dar erro.
  *
- * `NUVENS_FIM` tem um motivo que não é estético: o texto da página vira branco
- * em p≈0,62, e nuvem quase branca atrás de texto branco derruba o contraste da
- * leitura para 1,3. As nuvens têm que ter saído antes disso.
+ * `NUVENS_FIM` não é escolha estética. O texto vira branco em p≈0,62, e nuvem
+ * quase branca atrás de texto branco derruba o contraste da leitura para 1,3.
  */
 const CEU = {
   NUVENS_INICIO: 0.14,
@@ -107,7 +105,6 @@ export default function Ceu({ progresso }) {
   const opEstrelas =
     trava((p - CEU.ESTRELAS_INICIO) / CEU.ESTRELAS_RAMPA) * CEU.ESTRELAS_OPACIDADE;
 
-  // a lua entra depois das estrelas e sobe o resto da rolagem até o lugar dela
   const opLua = trava((p - CEU.LUA_INICIO) / CEU.LUA_RAMPA) * CEU.LUA_OPACIDADE;
   const sobeLua =
     (1 - trava((p - CEU.LUA_INICIO) / CEU.LUA_SUBIDA_RAMPA)) * CEU.LUA_SUBIDA_PX;

@@ -1,10 +1,8 @@
 /**
  * As invariantes da paleta.
  *
- * O valor destes testes não é conferir que uma cor é aquela cor: é travar as
- * garantias que custaram medição para existir. Se alguém mexer num marco do céu
- * ou numa tinta e a legibilidade cair, quem avisa é este arquivo, não o olho de
- * quem estiver rolando a página.
+ * Não conferem que uma cor é aquela cor: travam os pisos de legibilidade que
+ * custaram medição. Mexer num marco do céu e derrubar o contraste quebra aqui.
  */
 
 import test from "node:test";
@@ -26,7 +24,6 @@ const contraste = (a, b) => {
   const [alto, baixo] = x > y ? [x, y] : [y, x];
   return (alto + 0.05) / (baixo + 0.05);
 };
-/** A rolagem inteira, de meio em meio milésimo. */
 const AO_LONGO = [];
 for (let p = 0; p <= 1; p += 0.002) AO_LONGO.push(Number(p.toFixed(3)));
 
@@ -65,8 +62,8 @@ test("as réguas e a legenda nunca descem de 2,2", () => {
 });
 
 test("a linha da grade nunca coincide com o fundo", () => {
-  // Já coincidiu: quando `linha` era um valor por marco, ela cruzava o fundo
-  // em p=0,436 e a grade sumia da tela. Hoje ela deriva do fundo e não cruza.
+  // Já aconteceu, com `linha` como valor por marco: cruzava o fundo em
+  // p=0,436 e a grade sumia da tela.
   for (const p of AO_LONGO) {
     const c = paleta(p);
     const x = contraste(rgb(c.linha), rgb(c.fundo));

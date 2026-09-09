@@ -12,8 +12,7 @@ import { Separacao, Queda } from "./Paineis";
  * Ênfase dentro do parágrafo, sem trazer uma biblioteca de markdown.
  *
  * A copy vive em `secoes.js` como texto puro, para ser editada sem abrir JSX.
- * `**assim**` sai em negrito e `*assim*` em itálico, e é só isso: o dia em que
- * precisar de mais do que isso, é sinal de que o texto quer outro lugar.
+ * `**assim**` sai em negrito e `*assim*` em itálico, e nada além disso.
  */
 function Enfase({ children }) {
   const partes = String(children).split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g);
@@ -24,7 +23,7 @@ function Enfase({ children }) {
   });
 }
 
-/** Quanta rolagem basta para a seta da capa entender que já começou e sair. */
+/** Quanta rolagem já basta para a seta da capa sair. */
 const ROLAGEM_QUE_APAGA_A_SETA = 0.03;
 
 export default function App() {
