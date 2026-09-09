@@ -63,7 +63,7 @@ web/src/dados.json
 web/src/App.jsx      só desenha
 ```
 
-A separação existe por um motivo prático. Os números que aparecem na tela são exatamente os mesmos que os 16 testes de `prep/test_analise.py` verificam. Se a média mudar, o teste quebra antes de a tela mentir.
+A separação existe por um motivo prático. Os números que aparecem na tela são exatamente os mesmos que os testes verificam. Se a média mudar, o teste quebra antes de a tela mentir. E o `dados.json` que está no repositório é reproduzível: rodar `preparar.py` num clone limpo deixa o `git status` vazio.
 
 Do lado do front, cada arquivo responde por uma pergunta só.
 
@@ -71,6 +71,7 @@ Do lado do front, cada arquivo responde por uma pergunta só.
 formas.js    onde cada marca fica, em cada uma das sete formas
 tema.js      qual cor tudo tem, em cada ponto da rolagem
 secoes.js    o roteiro, um item por trecho de texto
+rolagem.js   os dois sinais que a rolagem produz, em hooks
 Grafico.jsx  desenha, e só
 ```
 
@@ -95,16 +96,34 @@ cd sono-dos-mamiferos
 python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt
 .venv/bin/python prep/preparar.py     # regera web/src/dados.json
-.venv/bin/python prep/test_analise.py # 16 testes
+.venv/bin/python prep/test_analise.py # os testes das contas
 
 cd web
 npm install
+npm test          # os testes da paleta e da geometria
 npm run dev
 ```
 
 Depois, abra `http://localhost:5173`.
 
+São 16 testes de cada lado em 09/09/2026, e cada suíte imprime o número do dia. Os do JS usam o `node:test` que já vem no Node, então não há dependência de teste no `package.json`.
+
 O `dados.json` já está versionado, então dá para rodar só o front se você não for mexer nas contas.
+
+## Performance
+
+Medido com aquecimento e mediana de 200 execuções, para ninguém precisar investigar de novo.
+
+```text
+quadro de rolagem, 58 marcas com escala de risco   0,024 ms
+quadro de rolagem, 58 marcas com tinta de sono     0,004 ms
+paleta() sozinha                                   0,003 ms
+posicoes(), a mais cara das sete formas            0,042 ms
+```
+
+O orçamento de um quadro a 60fps é 16,7 ms, então o cálculo de cor e geometria ocupa 0,15% dele. Não há o que otimizar aqui.
+
+No fio, a página inteira são **97,5 KB comprimidos**. Metade disso é o framer-motion, e ele é a peça: são as marcas se transformando de uma forma na outra. O `dados.json` embutido são 26 KB crus e 4,6 KB comprimidos, ou seja, irrelevante ao lado das bibliotecas.
 
 ## Limites conhecidos
 
@@ -113,6 +132,7 @@ O `dados.json` já está versionado, então dá para rodar só o front se você 
 * **Quatro espécies fora.** Girafa, canguru, okapi e marmota-de-barriga-amarela não tiveram o sono total medido. Sem essa medida a marca ficaria vazia nas sete telas, e vazio não é zero. Elas aparecem nomeadas no rodapé do site.
 * **Os índices são classificação, não medida.** Predação, exposição e perigo são notas de 1 a 5 que os autores atribuíram em 1976, não levantamento de campo.
 * **Correlação entre espécies não demonstra causa.** Bichos aparentados se parecem em muitas coisas ao mesmo tempo.
+* **Tudo é desenhado de uma vez.** As 58 espécies viram 58 grupos de SVG no DOM, sem virtualização. É confortável nessa escala e continuaria sendo em algumas centenas; uma base de milhares pediria outra abordagem. Não é problema desta base, é o limite que não estou resolvendo.
 * **Não está publicado.** Por enquanto roda local.
 
 Esses pontos são decisões e trade-offs conhecidos, não bugs escondidos.
