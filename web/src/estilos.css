@@ -236,8 +236,12 @@ body {
     height: 52vh; top: 0; padding: 14px 0;
     /* `--fundo` vem do inline de App.jsx e muda com a rolagem, junto com o céu */
     background: var(--fundo);
-    /* a borda evita que a marca mais baixa do gráfico encoste no texto */
-    box-shadow: 0 10px 18px -14px rgba(0, 0, 0, 0.45);
+    /* Sem isto o texto atravessa o desenho. `.trecho` inativo tem opacidade
+       0,34, e opacidade menor que 1 cria contexto de empilhamento: o trecho
+       passa a pintar na mesma camada dos posicionados e, vindo depois no DOM,
+       ganha do gráfico. No desktop não aparece porque as colunas não se
+       sobrepõem. */
+    z-index: 2;
   }
   .eixo-num, .eixo-titulo { font-size: 20px; }
   .marca-rotulo { font-size: 22px; }
@@ -258,7 +262,24 @@ body {
   .premissa p { font-size: 14px; }
   .sobrenome { font-size: 11px; letter-spacing: 0.12em; }
   .rolar { margin-top: 36px; }
-  .grafico { height: 46vh; }
+  /* O viewBox é 600x760, retrato. Numa caixa baixa o `meet` escala por altura e
+     o desenho encolhe na largura: a 46vh sobravam 197px de desenho numa tela de
+     390, com o resto virando margem vazia dos dois lados. Mais altura devolve a
+     largura. */
+  .grafico { height: 58vh; }
+  /* O texto passa por baixo do gráfico grudado e era cortado no meio da linha.
+     Esta faixa desce junto com ele e apaga o texto por gradiente, para a borda
+     ler como desvanecimento e não como guilhotina. */
+  .grafico::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    height: 52px;
+    background: linear-gradient(var(--fundo), rgba(0, 0, 0, 0));
+    pointer-events: none;
+  }
   .trecho h2 { font-size: clamp(23px, 6.4vw, 30px); }
   .trecho p { font-size: 16px; }
   .painel { padding: 14px 15px; }
