@@ -75,6 +75,10 @@ export default function App() {
         >
           role para começar o dia ↓
         </p>
+        {/* só aparece em tela estreita; no desktop o CSS mantém escondido */}
+        <p className="aviso-tela" style={{ color: cores.textoFraco }}>
+          Feito para tela grande. Se puder, abra no computador.
+        </p>
       </header>
 
       {/* o desenho troca de lado a cada duas fases, não a cada uma: 1 e 2 de um

@@ -141,6 +141,8 @@ Esses pontos são decisões e trade-offs conhecidos, não bugs escondidos.
 
 Feito para aprender a contar uma coisa com um gráfico só, em vez de sete.
 
+**É uma experiência de tela grande.** No celular a leitura funciona, mas o desenho perde espaço: o `viewBox` é retrato e a tela do telefone não é.
+
 Fonte dos dados: Allison, T. & Cicchetti, D. (1976). *Sleep in Mammals: Ecological and Constitutional Correlates*. Science 194:732-734. Distribuída no pacote R `openintro`, via Rdatasets.
 
 O código pode ser usado, copiado e adaptado livremente.

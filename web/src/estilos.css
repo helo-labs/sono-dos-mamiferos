@@ -134,6 +134,9 @@ body {
   50% { transform: translate3d(0, 5px, 0); }
 }
 
+/* Existe no HTML sempre, mas só o celular mostra. */
+.aviso-tela { display: none; }
+
 /* ── Corpo: gráfico grudado, texto rolando ───────────────────────────── */
 .corpo {
   display: grid;
@@ -250,6 +253,10 @@ body {
   .texto { padding: 6vh 0 12vh; }
   .trecho { min-height: 74vh; }
   .legenda { font-size: 11px; }
+  .aviso-tela {
+    display: block;
+    font-size: 12px; letter-spacing: 0.02em; margin: 22px 0 0; opacity: 0.85;
+  }
 }
 
 /* Celular de pé. A capa perde o tamanho de cartaz, que numa tela estreita só
