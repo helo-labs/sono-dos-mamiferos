@@ -1,0 +1,152 @@
+/**
+ * O roteiro da narrativa: um item por trecho de rolagem.
+ *
+ * `forma`   — qual dos sete desenhos de `formas.js` as 58 marcas assumem aqui
+ * `ordem`   — por qual campo elas se organizam (só nas formas que empilham)
+ * `cor`     — o que pinta a marca
+ * `foco`    — espécies que ganham rótulo permanente
+ * `legenda` — como ler o desenho desta fase
+ *
+ * Em `texto`, uma string é um parágrafo e `{ painel: "x" }` põe o painel de
+ * dados naquele ponto da leitura, e não no fim da seção. Dentro do parágrafo,
+ * `**assim**` sai em negrito e `*assim*` em itálico.
+ */
+
+export const SECOES = [
+  {
+    id: "abertura",
+    forma: "faixa",
+    ordem: "sono",
+    cor: "sono",
+    foco: ["Littlebrownbat", "Roedeer"],
+    legenda: "cada faixa é um dia de 24 horas · a parte acesa é o sono",
+    titulo: "Cinquenta e oito dias",
+    texto: [
+      "Cada barra representa um dia inteiro de um mamífero. A parte acesa é o tempo em que ele está dormindo.",
+      "No topo, o **morcego-marrom-pequeno**: 19,9 horas de sono.",
+      "Lá embaixo, a **corça**: 2,6 horas.",
+      "Ela dorme menos em um dia inteiro do que o morcego em uma manhã.",
+      "Entre os dois, outros 56 bichos.",
+      "**O que decide onde cada um vai parar?**",
+    ],
+  },
+  {
+    id: "tamanho",
+    forma: "dispersao",
+    ordem: "peso",
+    cor: "sono",
+    foco: ["Africanelephant", "Littlebrownbat", "Lessershort-tailedshrew"],
+    legenda: "cada ponto é uma espécie · à direita, os mais pesados; acima, os que mais dormem",
+    titulo: "A primeira pista: tamanho",
+    texto: [
+      "As mesmas barras, agora ordenadas do maior para o menor.",
+      "De um lado, o **elefante-africano**, com 6,6 toneladas.",
+      "Do outro, o **musaranho-de-cauda-curta**, com apenas 5 gramas.",
+      "A faixa de sono cresce conforme o corpo diminui.",
+      "**Quanto menor o bicho, mais ele dorme.**",
+      "Ou pelo menos parece.",
+      "Olhe de novo para o fim da lista.",
+      "O musaranho, menor de todos, dorme 9,1 horas. O morcego logo acima pesa o dobro, e dorme 19,9.",
+      "O tamanho explica parte da história.",
+      "**Mas não explica tudo.**",
+    ],
+  },
+  {
+    id: "risco",
+    forma: "enxame",
+    ordem: "sono",
+    cor: "risco",
+    foco: [],
+    legenda: "cada ponto é uma espécie, agrupada pelo risco que corre · acima, os que mais dormem",
+    titulo: "A segunda pista: perigo",
+    texto: [
+      "Agora, uma nova camada.",
+      "A cor mostra o risco de predação:",
+      "**verde:** protegido",
+      "**vermelho:** exposto",
+      "E aqui o padrão fica difícil de ignorar.",
+      "Quem corre menos risco dorme **13,1 horas em média**.",
+      "Quem corre mais, apenas **4,1**.",
+      "Talvez não seja só uma questão de tamanho.",
+      "Talvez seja uma questão de poder fechar os olhos.",
+    ],
+  },
+  {
+    id: "separacao",
+    forma: "dispersaoRisco",
+    ordem: "sono",
+    cor: "risco",
+    foco: [],
+    legenda: "cada ponto é uma espécie · à direita, os mais pesados; embaixo, os mais expostos",
+    titulo: "Só que tamanho e perigo não são a mesma coisa",
+    texto: [
+      "Seria fácil pensar que os dois estão contando a mesma história.",
+      "Afinal, animais grandes tendem a ter menos predadores.",
+      "Mas, nesta base, a relação entre tamanho e risco de predação é fraca: **0,17**.",
+      "Eles podem ser analisados separadamente.",
+      "E, quando fazemos isso, aparece uma diferença interessante.",
+      { painel: "separacao" },
+      "Quase um empate no sono total. Mas olhe para o sonho.",
+      "Aqui a história muda.",
+      "**Para o sono total, tamanho e perigo pesam quase o mesmo. Para o sonho, o perigo pesa mais que o dobro.**",
+    ],
+  },
+  {
+    id: "sonho",
+    forma: "halteres",
+    ordem: "sono",
+    cor: "sono",
+    foco: ["Wateropossum", "Vervet"],
+    legenda: "o ponto marca o fim do sono profundo · o trecho claro até a ponta é o sonho",
+    titulo: "O sonho é o primeiro a desaparecer",
+    texto: [
+      "Agora o sono se divide em dois:",
+      "**sono profundo** e **sono REM**, a fase associada aos sonhos.",
+      "É também uma fase em que o animal fica mais vulnerável.",
+      "E, conforme o risco aumenta, as duas partes encolhem.",
+      "Mas não na mesma velocidade.",
+      { painel: "queda" },
+      "O sono profundo diminui. O REM diminui ainda mais.",
+      "Quanto mais perigoso o mundo lá fora, menos espaço sobra para sonhar.",
+      "**O descanso fica. O sonho é cortado primeiro.**",
+    ],
+  },
+  {
+    id: "equidna",
+    forma: "mostrador",
+    ordem: "sono",
+    cor: "sono",
+    foco: ["Echidna"],
+    legenda: "o mostrador é um dia de 24 horas · em volta, as outras 57 espécies",
+    titulo: "E há quem não sonhe",
+    texto: [
+      "A equidna dorme **8,6 horas por dia**.",
+      "Mas, nesta base, nenhuma delas é REM.",
+      "É a única espécie registrada com zero nessa medida.",
+      "Um animal que dorme bastante, **sem nenhum minuto de sonho medido.**",
+    ],
+  },
+  {
+    id: "humano",
+    forma: "polar",
+    ordem: "sono",
+    cor: "risco",
+    foco: ["Man"],
+    legenda: "a volta inteira é um dia · cada raio é uma espécie, e a ponta clara é o sonho",
+    titulo: "E nós?",
+    texto: [
+      "Nossa barra está aqui.",
+      "No meio das outras 57.",
+      "Risco **1**, o menor da escala.",
+      "Pela lógica das últimas telas, deveríamos estar entre os grandes dorminhocos.",
+      "As espécies de risco mínimo dormem, em média, **13,4 horas**.",
+      "Nós dormimos **8**.",
+      "**44º lugar entre 58.**",
+      "Mas então aparece o sonho.",
+      "Dormimos **1,9 hora de REM**.",
+      "**22º entre 48.**",
+      "Pouco sono. Um tanto razoável de sonho.",
+      "**Dormimos como quem tem medo. Sonhamos como quem não tem.**",
+    ],
+  },
+];

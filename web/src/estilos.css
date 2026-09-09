@@ -1,0 +1,246 @@
+/* Hipnos — o fundo e as cores vêm do JS (tema.js), porque mudam com a rolagem.
+   Aqui fica só a estrutura. */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.pagina {
+  transition: background 220ms linear, color 260ms ease;
+  min-height: 100vh;
+  position: relative;
+}
+.capa, .corpo, .rodape { position: relative; z-index: 1; }
+
+/* ── Céu: as nuvens do meio-dia, a lua e o campo de estrelas do fim ───── */
+/* Camada decorativa e fixa. Nenhum arquivo: nuvens e lua são gradientes
+   radiais, e as estrelas são geradas por semente fixa em Ceu.jsx. */
+.ceu { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+.nuvens { position: absolute; inset: 0; transition: opacity 700ms linear; }
+.nuvem-passo { position: absolute; display: block; will-change: transform; }
+.nuvem {
+  display: block;
+  width: 100%;
+  aspect-ratio: 5 / 2;
+  --branco: 255, 250, 242;
+  background:
+    radial-gradient(ellipse 30% 40% at 26% 64%, rgba(var(--branco), 0.95), rgba(var(--branco), 0) 70%),
+    radial-gradient(ellipse 26% 62% at 46% 40%, rgba(var(--branco), 0.95), rgba(var(--branco), 0) 70%),
+    radial-gradient(ellipse 24% 44% at 68% 58%, rgba(var(--branco), 0.9), rgba(var(--branco), 0) 70%),
+    radial-gradient(ellipse 46% 26% at 50% 76%, rgba(var(--branco), 0.85), rgba(var(--branco), 0) 72%);
+  filter: blur(7px);
+  animation: derivar 60s ease-in-out infinite;
+  will-change: transform;
+}
+/* A nuvem anda de verdade, mas devagar: uns 14% da própria largura numa volta
+   inteira de meio minuto ou mais. A 4% de antes o movimento existia no código e
+   não existia no olho. */
+@keyframes derivar {
+  0%, 100% { transform: translate3d(-6%, 1%, 0) scale(1); }
+  50% { transform: translate3d(8%, -2.5%, 0) scale(1.06); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nuvem { animation: none; }
+  .rolar { animation: none; }
+}
+
+/* A lua: um gradiente radial, no alto e no fim da rolagem. */
+.lua {
+  position: absolute;
+  /* Na última fase o desenho vai para a direita, e a lua estava caindo em cima
+     dele. Encostada na borda, ela fica fora das duas colunas de conteúdo, que
+     param no contêiner de 1180px. */
+  right: 1%;
+  top: 5%;
+  width: min(20vw, 150px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(238, 242, 255, 0.9) 0%,
+    rgba(214, 224, 255, 0.36) 44%,
+    rgba(190, 206, 255, 0.1) 66%,
+    rgba(190, 206, 255, 0) 78%
+  );
+  transition: opacity 500ms linear;
+  will-change: transform, opacity;
+}
+
+.estrelas { position: absolute; inset: 0; transition: opacity 700ms linear; }
+.estrela {
+  position: absolute;
+  border-radius: 50%;
+  background: rgb(228, 234, 255);
+  box-shadow: 0 0 4px rgba(196, 210, 255, 0.45);
+  opacity: var(--brilho);
+  /* duração e atraso vêm de Ceu.jsx: cada estrela tem o ciclo dela */
+  animation: deriva 20s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+/* Um ciclo só, fazendo as duas coisas: a estrela caminha alguns pixels e
+   respira de brilho no caminho. Sem salto no fim: volta à posição de partida. */
+@keyframes deriva {
+  0%, 100% { transform: translate3d(0, 0, 0); opacity: calc(var(--brilho) * 0.6); }
+  50% { transform: translate3d(var(--dx), var(--dy), 0); opacity: var(--brilho); }
+}
+/* Quem pediu menos movimento no sistema fica com o campo parado. */
+@media (prefers-reduced-motion: reduce) {
+  .estrela { animation: none; }
+}
+
+/* ── Capa ─────────────────────────────────────────────────────────────── */
+.capa {
+  min-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+.sobrenome {
+  font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+  margin: 0 0 20px; font-weight: 500;
+}
+.capa h1 {
+  font-family: Fraunces, Georgia, serif;
+  font-size: clamp(64px, 13vw, 168px);
+  font-weight: 600; line-height: 0.92; margin: 0 0 28px; letter-spacing: -0.03em;
+}
+.chamada {
+  font-family: Fraunces, Georgia, serif;
+  font-size: clamp(20px, 2.8vw, 32px);
+  line-height: 1.35; margin: 0 auto; max-width: 34ch; font-weight: 400;
+}
+/* larga de propósito: são duas frases só, e a 46ch elas quebravam em seis
+   linhas na capa. A medida ainda é curta o suficiente para ler sem esforço. */
+.premissa { margin: 26px auto 0; max-width: 66ch; }
+.premissa p { font-size: 15px; line-height: 1.6; margin: 0 0 10px; }
+.premissa p:last-child { margin-bottom: 0; }
+/* a seta respira enquanto ninguém rolou; some assim que a rolagem começa */
+.rolar {
+  font-size: 13px; margin-top: 56px; letter-spacing: 0.04em;
+  transition: opacity 400ms ease;
+  animation: chamar 2.4s ease-in-out infinite;
+}
+@keyframes chamar {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, 5px, 0); }
+}
+
+/* ── Corpo: gráfico grudado, texto rolando ───────────────────────────── */
+.corpo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 32px;
+  align-items: start;
+}
+.grafico {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 24px 0;
+}
+/* O desenho não fica a página inteira do mesmo lado: a cada fase ele atravessa
+   para o outro e o texto vem ocupar o lugar dele. Trocar a coluna do grid daria
+   um salto seco; o que anda é a transformação, e as duas colunas têm a mesma
+   largura, então a distância é a própria largura mais o vão. */
+.grafico, .texto { transition: transform 620ms cubic-bezier(0.4, 0, 0.2, 1); }
+.corpo.trocado .grafico { transform: translateX(calc(100% + 56px)); }
+.corpo.trocado .texto { transform: translateX(calc(-100% - 56px)); }
+.legenda { font-size: 12px; margin: 14px 0 0; letter-spacing: 0.02em; }
+
+.texto { padding: 22vh 0; }
+.trecho { min-height: 82vh; display: flex; flex-direction: column; justify-content: center; }
+.trecho h2 {
+  font-family: Fraunces, Georgia, serif;
+  font-size: clamp(26px, 3.2vw, 40px);
+  font-weight: 600; line-height: 1.15; margin: 0 0 20px; letter-spacing: -0.015em;
+}
+.trecho p { font-size: 17px; line-height: 1.66; margin: 0 0 16px; max-width: 42ch; }
+/* o painel deixou de ficar no fim da seção e pode cair entre dois parágrafos */
+.trecho .painel { margin: 10px 0 22px; }
+.trecho { opacity: 0.34; transition: opacity 320ms ease; }
+.trecho.ativo { opacity: 1; }
+
+/* ── O gráfico: 58 marcas em sete formas ─────────────────────────────── */
+/* A geometria toda vive no viewBox de formas.js; aqui só se diz que o desenho
+   ocupa a altura disponível. Os tamanhos de fonte estão em unidades do viewBox,
+   não em pixels de tela — por isso a tela estreita precisa de outros valores. */
+.tela { display: block; width: 100%; flex: 1; min-height: 0; overflow: visible; }
+.eixo-num { font-size: 12px; font-variant-numeric: tabular-nums; }
+.eixo-titulo { font-size: 12px; letter-spacing: 0.02em; }
+/* o rótulo pode cair por cima do desenho: o contorno da cor do fundo o mantém
+   legível sem precisar de caixa opaca atrás */
+.marca-rotulo {
+  font-size: 13px;
+  font-weight: 500;
+  stroke-width: 3.5px;
+  stroke-linejoin: round;
+  paint-order: stroke;
+}
+.mostrador-nome { font-family: Fraunces, Georgia, serif; font-size: 20px; font-weight: 600; }
+.mostrador-num { font-size: 13px; font-variant-numeric: tabular-nums; }
+
+/* ── Painéis dentro do texto ─────────────────────────────────────────── */
+.painel { border: 1px solid; border-radius: 10px; padding: 18px 20px; margin: 8px 0 4px; }
+.painel-linha + .painel-linha { margin-top: 20px; }
+.painel-titulo { font-size: 14px; font-weight: 600; margin: 0 0 10px; }
+.painel-barra {
+  display: grid; grid-template-columns: 116px 1fr 42px;
+  align-items: center; gap: 10px; font-size: 12px; margin-bottom: 7px;
+}
+.painel-trilho { height: 8px; border-radius: 4px; overflow: hidden; display: flex; }
+.painel-trilho > span { display: block; height: 100%; }
+.painel-risco {
+  display: grid; grid-template-columns: 22px 1fr 46px;
+  align-items: center; gap: 10px; margin-bottom: 8px; font-size: 12px;
+}
+.painel-chip {
+  width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center;
+  font-size: 11px; font-weight: 600; color: #fff;
+}
+.painel-nota { font-size: 12px; line-height: 1.5; margin: 12px 0 0; }
+
+/* ── Rodapé ───────────────────────────────────────────────────────────── */
+.rodape {
+  max-width: 1180px; margin: 0 auto; padding: 64px 32px 96px;
+  border-top: 1px solid; margin-top: 12vh;
+}
+.rodape h3 { font-family: Fraunces, Georgia, serif; font-size: 22px; margin: 0 0 16px; font-weight: 600; }
+.rodape p { font-size: 14px; line-height: 1.65; margin: 0 0 14px; max-width: 68ch; }
+.rodape .fonte { font-size: 12px; margin-top: 26px; }
+
+/* ── Telas estreitas ─────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .corpo { grid-template-columns: 1fr; gap: 0; padding: 0 20px; }
+  /* uma coluna só: não há outro lado para onde atravessar */
+  .corpo.trocado .grafico, .corpo.trocado .texto { transform: none; }
+  .capa, .rodape { padding-left: 20px; padding-right: 20px; }
+  .grafico {
+    height: 52vh; top: 0; padding: 14px 0;
+    backdrop-filter: blur(3px);
+  }
+  .eixo-num, .eixo-titulo { font-size: 20px; }
+  .marca-rotulo { font-size: 22px; }
+  .mostrador-nome { font-size: 30px; }
+  .mostrador-num { font-size: 20px; }
+  .texto { padding: 6vh 0 12vh; }
+  .trecho { min-height: 74vh; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
