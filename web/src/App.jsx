@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo } from "react";
 import dados from "./dados.json";
 import { SECOES } from "./secoes";
 import { trava } from "./formas";
+import { useProgressoDaRolagem, useSecaoAtiva } from "./rolagem";
 import { paleta } from "./tema";
 import Ceu from "./Ceu";
 import Grafico from "./Grafico";
@@ -24,35 +25,8 @@ function Enfase({ children }) {
 }
 
 export default function App() {
-  const [atual, setAtual] = useState(0);
-  const [progresso, setProgresso] = useState(0);
-  const refs = useRef([]);
-
-  // O progresso da rolagem é o que amanhece e anoitece a página. É lido do
-  // scroll da janela, não do índice da seção, para a transição ser contínua.
-  useEffect(() => {
-    const aoRolar = () => {
-      const total = document.body.scrollHeight - window.innerHeight;
-      setProgresso(total > 0 ? window.scrollY / total : 0);
-    };
-    aoRolar();
-    window.addEventListener("scroll", aoRolar, { passive: true });
-    return () => window.removeEventListener("scroll", aoRolar);
-  }, []);
-
-  // Qual trecho do texto está no meio da tela decide o estado do gráfico.
-  useEffect(() => {
-    const observador = new IntersectionObserver(
-      (entradas) => {
-        entradas.forEach((e) => {
-          if (e.isIntersecting) setAtual(Number(e.target.dataset.indice));
-        });
-      },
-      { rootMargin: "-45% 0px -45% 0px" }
-    );
-    refs.current.forEach((el) => el && observador.observe(el));
-    return () => observador.disconnect();
-  }, []);
+  const progresso = useProgressoDaRolagem();
+  const { atual, refs } = useSecaoAtiva(SECOES.length);
 
   const cores = useMemo(() => paleta(progresso), [progresso]);
   const secao = SECOES[atual];
@@ -114,7 +88,7 @@ export default function App() {
             <section
               key={s.id}
               data-indice={i}
-              ref={(el) => (refs.current[i] = el)}
+              ref={(el) => (refs[i] = el)}
               className={i === atual ? "trecho ativo" : "trecho"}
             >
               <h2>{s.titulo}</h2>
