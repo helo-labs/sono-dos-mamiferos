@@ -47,7 +47,13 @@ export function useSecaoAtiva(quantos) {
     const observador = new IntersectionObserver(
       (entradas) => {
         entradas.forEach((e) => {
-          if (e.isIntersecting) setAtual(Number(e.target.dataset.indice));
+          if (!e.isIntersecting) return;
+          // O índice vem do DOM, que é de fora daqui: um trecho sem
+          // `data-indice` daria NaN, e o roteiro indexado por NaN é undefined,
+          // o que derruba a página inteira na primeira leitura de `secao.forma`.
+          const i = Number(e.target.dataset.indice);
+          if (!Number.isInteger(i) || i < 0 || i >= quantos) return;
+          setAtual(i);
         });
       },
       { rootMargin: FAIXA_DE_LEITURA }
