@@ -334,6 +334,13 @@ export default function Grafico({ especies, secao, cores, progresso }) {
                 style={{ pointerEvents: "stroke", cursor: "crosshair" }}
                 onMouseEnter={() => setSobre(e.id)}
                 onMouseLeave={() => setSobre((a) => (a === e.id ? null : a))}
+                onPointerDown={(ev) => {
+                  // No toque não existe hover, e sem isto não há como saber
+                  // que bicho é cada marca no celular. O mouse sai fora daqui
+                  // para o comportamento do desktop continuar sendo o de antes.
+                  if (ev.pointerType === "mouse") return;
+                  setSobre((a) => (a === e.id ? null : e.id));
+                }}
               />
             )}
           </motion.g>

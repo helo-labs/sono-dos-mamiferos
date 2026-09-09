@@ -224,6 +224,9 @@ body {
 .rodape .fonte { font-size: 12px; margin-top: 26px; }
 
 /* ── Telas estreitas ─────────────────────────────────────────────────── */
+/* Numa coluna só, o texto rola POR BAIXO do gráfico grudado. É por isso que
+   aqui ele precisa de fundo próprio, coisa que no desktop nunca acontece: lá
+   cada um tem a sua coluna e nunca se sobrepõem. */
 @media (max-width: 900px) {
   .corpo { grid-template-columns: 1fr; gap: 0; padding: 0 20px; }
   /* uma coluna só: não há outro lado para onde atravessar */
@@ -231,7 +234,10 @@ body {
   .capa, .rodape { padding-left: 20px; padding-right: 20px; }
   .grafico {
     height: 52vh; top: 0; padding: 14px 0;
-    backdrop-filter: blur(3px);
+    /* `--fundo` vem do inline de App.jsx e muda com a rolagem, junto com o céu */
+    background: var(--fundo);
+    /* a borda evita que a marca mais baixa do gráfico encoste no texto */
+    box-shadow: 0 10px 18px -14px rgba(0, 0, 0, 0.45);
   }
   .eixo-num, .eixo-titulo { font-size: 20px; }
   .marca-rotulo { font-size: 22px; }
@@ -239,6 +245,33 @@ body {
   .mostrador-num { font-size: 20px; }
   .texto { padding: 6vh 0 12vh; }
   .trecho { min-height: 74vh; }
+  .legenda { font-size: 11px; }
+}
+
+/* Celular de pé. A capa perde o tamanho de cartaz, que numa tela estreita só
+   empurra a chamada para fora da primeira dobra. */
+@media (max-width: 560px) {
+  .corpo, .capa, .rodape { padding-left: 16px; padding-right: 16px; }
+  .capa h1 { font-size: clamp(56px, 22vw, 88px); margin-bottom: 20px; }
+  .chamada { font-size: 19px; max-width: 26ch; }
+  .premissa { margin-top: 20px; }
+  .premissa p { font-size: 14px; }
+  .sobrenome { font-size: 11px; letter-spacing: 0.12em; }
+  .rolar { margin-top: 36px; }
+  .grafico { height: 46vh; }
+  .trecho h2 { font-size: clamp(23px, 6.4vw, 30px); }
+  .trecho p { font-size: 16px; }
+  .painel { padding: 14px 15px; }
+  .painel-barra { font-size: 13px; }
+  .rodape { padding: 44px 16px 72px; }
+}
+
+/* Celular deitado: sobra pouca altura, e 46vh de gráfico não deixaria caber
+   uma linha de texto. O desenho encolhe para o texto continuar legível. */
+@media (max-width: 900px) and (max-height: 500px) {
+  .grafico { height: 62vh; }
+  .capa { min-height: 100vh; }
+  .trecho { min-height: 100vh; }
 }
 
 @media (prefers-reduced-motion: reduce) {

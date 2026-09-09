@@ -38,7 +38,14 @@ export default function App() {
   return (
     <div
       className="pagina"
-      style={{ background: cores.fundo, color: cores.texto, "--texto-fraco": cores.textoFraco }}
+      style={{
+        background: cores.fundo,
+        color: cores.texto,
+        "--texto-fraco": cores.textoFraco,
+        // o celular usa isto para dar fundo opaco ao gráfico grudado;
+        // no desktop nada lê esta variável
+        "--fundo": cores.fundo,
+      }}
     >
       <Ceu progresso={progresso} />
 
